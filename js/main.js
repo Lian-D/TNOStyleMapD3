@@ -4,14 +4,14 @@
 
 Promise.all([
   d3.json('data/world-110m.json'),
-  d3.csv('data/world_travel.csv')
+  d3.csv('data/world_travel.csv'),
+  d3.csv('data/countries.csv')
 ]).then(data => {
-  // data[1].forEach(d => {
-  //   d.visitors = +d.visitors;
-  // })
+
+  console.log(data[2])
 
   const geoMap = new GeoMap({ 
     parentElement: '#map'
-  }, data[0], data[1]);
+  }, data[0], data[1], data[2]);
 })
 .catch(error => console.error(error));

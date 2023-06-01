@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lian's Travel Map</title>
+    <title>TNO OTL MAP</title>
     <link rel="shortcut icon" type='image/x-icon' href="favicon.ico?"/>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -9,18 +9,19 @@
     <!-- Add HTML content, SVG drawing area, ... -->
     <div class="header">
       <h1>
-        🗺️Lian's Travel Plans📍
+        TNO OTL D3 DEMO
       </h1>
     </div>
 <body>
+  <svg height="10" width="10" xmlns="http://www.w3.org/2000/svg" version="1.1"> <defs> <pattern id="horizontal-stripe-3" patternUnits="userSpaceOnUse" width="10" height="10"> <image xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMCcgaGVpZ2h0PScxMCc+CiAgPHJlY3Qgd2lkdGg9JzEwJyBoZWlnaHQ9JzEwJyBmaWxsPSd3aGl0ZScgLz4KICA8cmVjdCB4PScwJyB5PScwJyB3aWR0aD0nMTAnIGhlaWdodD0nMycgZmlsbD0nYmxhY2snIC8+Cjwvc3ZnPg==" x="0" y="0" width="10" height="10"> </image> </pattern> </defs> </svg>
     <div id="map" style="margin: auto; display: block;" text-align: center;></div>
     <div id="tooltip"></div>
 
-    <ul class="legend">
+    <!-- <ul class="legend">
       <li class="legend-btn" data-difficulty="Visited"><span class="legend-symbol"></span> Visited</li>
       <li class="legend-btn" data-difficulty="Planned"><span class="legend-symbol"></span> Planned (Next)</li>
       <li class="legend-btn" data-difficulty="Future Planned"><span class="legend-symbol"></span> Planned (Far Future)</li>
-  </ul>
+  </ul> -->
 
     
     <script src="js/d3.v6.min.js"></script>

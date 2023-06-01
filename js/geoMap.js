@@ -4,7 +4,7 @@ class GeoMap {
    * @param {Object}
    * @param {Array}
    */
-  constructor(_config, _geoData, _data) {
+  constructor(_config, _geoData, _data, _mapdata) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1800,
@@ -14,14 +14,24 @@ class GeoMap {
     };
     this.geoData = _geoData;
     this.data = _data;
+    this.mapdata = _mapdata;
     this.initVis();
-  }     
+  } 
+
+  getDarkColor() {
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += Math.floor(Math.random() * 10);
+    }
+    return color;
+}
 
   /**
    * We initialize scales/axes and append static elements, such as axis titles.
    */
   initVis() {
     let vis = this;
+    console.log(this.mapdata);
 
     // Calculate inner chart size. Margin specifies the space around the actual chart.
     vis.width =
@@ -62,6 +72,7 @@ class GeoMap {
 
     vis.geoPath = d3.geoPath().projection(vis.projection);
 
+
     vis.updateVis();
   }
 
@@ -86,7 +97,11 @@ class GeoMap {
       )
       .join('path')
       .attr('class', 'geo-path')
-      .attr('d', vis.geoPath);
+      .attr('d',  vis.geoPath)
+      .attr('fill', '#horizontal-stripe-9')
+      .attr('fill', (d) => {
+        return this.getDarkColor()
+      });
 
     // Append country borders
     const geoBoundaryPath = vis.chart
@@ -102,18 +117,9 @@ class GeoMap {
       .data(vis.data)
       .join('circle')
       .attr('class', (d) => {
-        console.log(d);
-        if (d.complete == 'true') {
-          return 'geo-symbol-done';
-        } else if (d.time.includes("Planned")){
-          return 'geo-symbol-progress';
-        }else if (d.danger == 'true'){
-          return 'geo-symbol-danger';
-        }else {
-          return 'geo-symbol-planned';
-        }
+          return 'geo-symbol-capital';
       })
-      .attr('r', 3.5)
+      .attr('r', 2)
       .attr('cx', (d) => vis.projection([d.lon, d.lat])[0])
       .attr('cy', (d) => vis.projection([d.lon, d.lat])[1]);
 
@@ -135,31 +141,34 @@ class GeoMap {
 
     // Append text labels to show the titles of all sights
     // const geoSymbolLabels = vis.chart.selectAll('.geo-label')
-    //     .data(vis.data)
-    //   .join('text')
+    //     .data(vis.mapdata)
+    //     .join('text')
     //     .attr('class', 'geo-label')
     //     .attr('dy', '0em')
     //     .attr('text-anchor', 'middle')
     //     .attr('x', d => vis.projection([d.lon,d.lat])[0]+4)
     //     .attr('y', d => (vis.projection([d.lon,d.lat])[1]))
-    //     // .style('font-size', '3px')
+    //     .style('font-size', '3px')
     //     .text(d => d.name);
 
     // Append text labels with the number of visitors for two sights (to be used as a legend)
-    // const geoSymbolVisitorLabels = vis.chart
-    //   .selectAll('.geo-visitor-label')
-    //   .data(vis.data)
-    //   .join('text')
-    //   .filter((d) => d.showLabel)
-    //   .attr('class', 'geo-visitor-label')
-    //   .attr('dy', '.35em')
-    //   .attr('text-anchor', 'middle')
-    //   .attr('x', (d) => vis.projection([d.lon, d.lat])[0])
-    //   .attr(
-    //     'y',
-    //     (d) =>
-    //       vis.projection([d.lon, d.lat])[1] + vis.symbolScale(d.visitors) + 12
-    //   )
-      // .text((d) => `${d.visitors}`);
+    const geoSymbolVisitorLabels = vis.chart
+      .selectAll('.geo-label')
+      .data(vis.mapdata)
+      .join('text')
+      .attr('class', 'geo-label')
+      .attr('dy', '.35em')
+      .attr('text-anchor', 'middle')
+      .attr('x', (d) => {
+        console.log(d);
+        return vis.projection([d.lon, d.lat])[0];
+      })
+      .attr(
+        'y',
+        (d) => {
+          return vis.projection([d.lon, d.lat])[1]
+        }
+      )
+      .text((d) => `${d.country}`);
   }
 }
