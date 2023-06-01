@@ -1,0 +1,121 @@
+html {
+  background-color: #0c0c0c;
+  background-size: 100% 100%;
+  height: 100%;
+  width: 100%;
+  zoom: 100%;
+}
+
+body {
+  font-family: open sans;
+  padding: 20px 40px;
+  /* background-color: #3b3a3a */
+}
+h1 {
+  font-family: HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
+  Helvetica, Arial, "Lucida Grande", sans-serif;
+  margin: auto;
+  text-align: center;
+  color: #fff;
+}
+
+.geo-path {
+  fill: #1b1b1b;
+}
+.geo-boundary-path {  
+  stroke: #e0f3d4;  
+  fill: none;
+  stroke-width: 1;
+}
+.geo-symbol-done {
+  fill: #063458;
+  stroke: #ececec;
+  stroke-width: 1;
+  fill-opacity: 0.9;
+}
+
+.geo-symbol-progress {
+  fill: #14e653;
+  stroke: #ececec;
+  stroke-width: 1;
+  fill-opacity: 0.9;
+}
+
+.geo-symbol-planned {
+  fill: #f04603;
+  stroke: #fafafa;  
+  stroke-width: 1;
+  fill-opacity: 0.9;
+}
+
+.geo-symbol-danger {
+  fill: #f04603; 
+  stroke-width: 1;
+  fill-opacity: 0.2;
+}
+
+.geo-symbol:hover {
+  fill-opacity: 1;
+}
+.geo-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+.geo-visitor-label {
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Legend */
+.legend {
+  color: #fff;
+  list-style: none;
+  padding: 0;
+}
+.legend-btn {
+  display: inline-block;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+  stroke: #ececec;
+  transition: all ease-in-out 200ms;
+}
+.legend-btn:hover.legend-btn.inactive:hover  {
+  opacity: 0.7;
+}
+.legend-btn.inactive {
+  opacity: 0.5;
+}
+.legend-symbol {
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  stroke: #ececec;
+  display: inline-block;
+}
+.legend-btn[data-difficulty="Visited"] .legend-symbol {
+  background: #063458;;
+}
+.legend-btn[data-difficulty="Planned"] .legend-symbol {
+  background: #14e653;
+}
+.legend-btn[data-difficulty="Future Planned"] .legend-symbol {
+  background: #f04603;
+}
+
+#tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 3px 3px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px;
+  min-width: 160px;
+  color: #333;
+}
+.tooltip-title {
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+}
