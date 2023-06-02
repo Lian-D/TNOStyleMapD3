@@ -4,7 +4,7 @@ class GeoMap {
    * @param {Object}
    * @param {Array}
    */
-  constructor(_config, _geoData, _data, _mapdata) {
+  constructor(_config, _geoData, _data, _mapdata, _NATO, _BRICS, _display, _CSTO) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1800,
@@ -15,23 +15,27 @@ class GeoMap {
     this.geoData = _geoData;
     this.data = _data;
     this.mapdata = _mapdata;
+    this.nato = _NATO;
+    this.brics = _BRICS;
+    this.csto = _CSTO;
+    this.display = _display;
     this.initVis();
-  } 
+  }
 
   getDarkColor() {
     var color = '#';
     for (var i = 0; i < 6; i++) {
-        color += Math.floor(Math.random() * 10);
+      color += Math.floor(Math.random() * 10);
     }
     return color;
-}
+  }
 
   /**
    * We initialize scales/axes and append static elements, such as axis titles.
    */
   initVis() {
     let vis = this;
-    console.log(this.mapdata);
+    // console.log(this.mapdata);
 
     // Calculate inner chart size. Margin specifies the space around the actual chart.
     vis.width =
@@ -50,7 +54,7 @@ class GeoMap {
       .attr('width', vis.config.containerWidth)
       .attr('height', vis.config.containerHeight)
       .attr('display', 'block')
-      .style("margin", "auto");
+      .style('margin', 'auto');
 
     // Append group element that will contain our actual chart
     // and position it according to the given margin config
@@ -72,16 +76,11 @@ class GeoMap {
 
     vis.geoPath = d3.geoPath().projection(vis.projection);
 
-
     vis.updateVis();
   }
 
   updateVis() {
     let vis = this;
-
-    vis.data.forEach((d) => {
-      d.showLabel = d.name == 'Chichen Itza' || d.name == 'Great Wall';
-    });
 
     vis.renderVis();
   }
@@ -97,10 +96,21 @@ class GeoMap {
       )
       .join('path')
       .attr('class', 'geo-path')
-      .attr('d',  vis.geoPath)
+      .attr('d', vis.geoPath)
       .attr('fill', '#horizontal-stripe-9')
       .attr('fill', (d) => {
-        return this.getDarkColor()
+        console.log(vis.csto);
+        if (vis.nato.includes(d.properties.name)) {
+          return '#153043';
+        } else if (vis.csto.includes(d.properties.name)) {
+          return '#100000';
+        } else if (vis.brics.includes(d.properties.name)) {
+          return '#300000'
+        }
+        else {
+          // return this.getDarkColor();
+          return '#333333';
+        }
       });
 
     // Append country borders
@@ -117,7 +127,7 @@ class GeoMap {
       .data(vis.data)
       .join('circle')
       .attr('class', (d) => {
-          return 'geo-symbol-capital';
+        return 'geo-symbol-capital';
       })
       .attr('r', 2)
       .attr('cx', (d) => vis.projection([d.lon, d.lat])[0])
@@ -131,28 +141,16 @@ class GeoMap {
           .style('display', 'block')
           .style('left', `${event.pageX + vis.config.tooltipPadding}px`)
           .style('top', `${event.pageY + vis.config.tooltipPadding}px`).html(`
-              <div class="tooltip-title">${d.name}</div>
-              <div>${d.country}&nbsp; | visited: &nbsp;${d.time}</div>
+              <div class="tooltip-title">${d.country}</div>
+              <div>${d.capital}&nbsp; | &nbsp;${d.continent}</div>
             `);
       })
       .on('mouseleave', () => {
         d3.select('#tooltip').style('display', 'none');
       });
 
-    // Append text labels to show the titles of all sights
-    // const geoSymbolLabels = vis.chart.selectAll('.geo-label')
-    //     .data(vis.mapdata)
-    //     .join('text')
-    //     .attr('class', 'geo-label')
-    //     .attr('dy', '0em')
-    //     .attr('text-anchor', 'middle')
-    //     .attr('x', d => vis.projection([d.lon,d.lat])[0]+4)
-    //     .attr('y', d => (vis.projection([d.lon,d.lat])[1]))
-    //     .style('font-size', '3px')
-    //     .text(d => d.name);
-
     // Append text labels with the number of visitors for two sights (to be used as a legend)
-    const geoSymbolVisitorLabels = vis.chart
+    const geocountryLabels = vis.chart
       .selectAll('.geo-label')
       .data(vis.mapdata)
       .join('text')
@@ -160,15 +158,17 @@ class GeoMap {
       .attr('dy', '.35em')
       .attr('text-anchor', 'middle')
       .attr('x', (d) => {
-        console.log(d);
         return vis.projection([d.lon, d.lat])[0];
       })
-      .attr(
-        'y',
-        (d) => {
-          return vis.projection([d.lon, d.lat])[1]
+      .attr('y', (d) => {
+        return vis.projection([d.lon, d.lat])[1];
+      })
+      .text((d) => {
+        if (
+          vis.display.includes(d.name)
+        ) {
+          return `${d.name}`;
         }
-      )
-      .text((d) => `${d.country}`);
+      });
   }
 }
